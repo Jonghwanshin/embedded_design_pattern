@@ -1,0 +1,19 @@
+@startuml Flowchart for graspAt() function
+(*) --> me -> currentStep=-1;\nme->nSteps=0;\nRobotArmManager_zero(me);
+--> RobotArmManager_computerTrajectory(me, x, y, z, t);
+if [me->nSteps == 0] Then
+    -->me->status = -1;
+    -->(*)
+else
+    --> me->currentStep++;
+    --> me->status = RobotArmManager_executeStep(me);
+if [me->status ==0 && me->currentStep < me->nSteps] Then
+    --> me->currentStep++;
+else
+    --> (*) 
+    note right 
+        return me->status;
+    end note
+end if
+
+@enduml

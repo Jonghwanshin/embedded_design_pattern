@@ -1,0 +1,58 @@
+@startuml classdiagram for observer pattern
+scale 2
+
+class TMDQueue{
+    head:int=0
+    size:int=0
+    insert(tmd:TimeMarkedData):void
+    remove(index:int):TimeMarkedData
+    isEmpty():boolean
+    getNextIndex(index:int):int
+} 
+
+class ArrythemiaDetector{
+    pvcCount:int
+    STSegmentHeight:int
+    firstDegreeHeatBlock:int
+    Two_one_heartBlock:int
+    prematrueAtrialContraction:int
+    fibrillation:int
+    index:int=0
+    identifyArrthmia():void
+    getDataSample():void
+}
+
+class ECG_Module{
+    lead1:int
+    lead2:int
+    dataNum:int
+    setLeadPair(l1:int,l2:int):void
+    acquireValue():void
+}
+
+class QRSDetector{
+    heartRate:int
+    index:int
+    computeHR():void
+    getDataSample():void
+}
+
+class HistorgramDisplay{
+    index:int=0
+    updateHistogram():void
+    getValue():void
+}
+
+class WaveformDisplay{
+    index:int=0
+    display():void
+    getScalarValue():void
+}
+
+TMDQueue <-- ECG_Module
+TMDQueue <-- ArrythemiaDetector
+TMDQueue <-- QRSDetector
+TMDQueue <-- HistorgramDisplay
+TMDQueue <-- WaveformDisplay
+
+@enduml

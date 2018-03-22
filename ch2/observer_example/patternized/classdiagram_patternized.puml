@@ -1,0 +1,103 @@
+@startuml classdiagram for observer pattern
+scale 2
+
+class PatternLib::AbstrctObserver{
+    install():void
+    update(instanceNum:int, value:int): void
+}
+
+class PatternLib::AbstractSubject{
+    nSubcribers:int = 0
+    value:int
+    subscribe(updateFuncAddr:UpdateFuncPtr):void
+    unsubscribe(updateFuncPtr:UpdateFuncPtr):void
+    notify():void
+}
+
+class NotificationHandle{
+    updateAddr:UpdateFuncPtr
+}
+
+class TMDQueue{
+    head:int=0
+    size:int=0
+    nSubscribers:int=0
+    insert(tmd:TimeMarkedData):void
+    remove(index:int):TimeMarkedData
+    isEmpty():boolean
+    getNextIndex(index:int):int
+    notify(tmd:TimeMarkedData):void
+    subscribe(updateFuncAddr:UpdateFuncPtr):void
+    unsubscribe(updateFuncAddr:UpdateFuncPtr):void
+} 
+
+class ECG_Module{
+    lead1:int
+    lead2:int
+    dataNum:int
+    setLeadPair(l1:int,l2:int):void
+    acquireValue():void
+}
+
+class ArrythemiaDetector{
+    pvcCount:int
+    STSegmentHeight:int
+    firstDegreeHeatBlock:int
+    Two_one_heartBlock:int
+    prematrueAtrialContraction:int
+    fibrillation:int
+    ' index:int=0
+    identifyArrthmia():void
+    ' getDataSample():void
+    update(tmd: TimeMarktedData):void
+    init()
+    cleanup()
+}
+
+
+class QRSDetector{
+    heartRate:int
+    ' index:int
+    computeHR():void
+    ' getDataSample():void
+    update(tmd: TimeMarktedData):void
+    init()
+    cleanup()
+}
+
+class HistorgramDisplay{
+    ' index:int=0
+    updateHistogram():void
+    ' getValue():void
+    update(tmd: TimeMarktedData):void
+    init()
+    cleanup()
+}
+
+class WaveformDisplay{
+    index:int=0
+    display():void
+    ' getScalarValue():void
+    update(tmd: TimeMarktedData):void
+    init()
+    cleanup()
+}
+
+NotificationHandle <-- NotificationHandle
+NotificationHandle <-- TMDQueue
+
+PatternLib::AbstrctObserver <|-- WaveformDisplay
+PatternLib::AbstrctObserver <|-- HistorgramDisplay
+PatternLib::AbstrctObserver <|-- QRSDetector
+PatternLib::AbstrctObserver <|-- ArrythemiaDetector
+
+PatternLib::AbstractSubject <|-- TMDQueue
+
+TMDQueue <-- ECG_Module
+TMDQueue <-- ArrythemiaDetector
+TMDQueue <-- QRSDetector
+TMDQueue <-- HistorgramDisplay
+TMDQueue <-- WaveformDisplay
+
+
+@enduml

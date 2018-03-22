@@ -1,0 +1,59 @@
+@startuml Observer Pattern Example
+
+class GasData{
+    flowRate: unsigned int
+    N2Conc: unsigned int
+    O2Conc: unsigned int
+}
+
+class GasSensor{
+    subscribe(instancePtr:void *, aPtr:gasDataAcceptorPtr): void
+    unsubscribe(aPtr: gasDataAcceptorPtr): void
+    notify(): void
+    newData(flow: unsigned int, n2: unsigned int, o2: unsigned int): void
+    dumpList(): void
+}
+
+class GasNotificationHandle{
+    acceptorPtr: void(*acceptorPtr)(void*, struct GasData*)
+    instancePtr: void*=NULL
+}
+
+class DisplayClient{
+    accept(g: struct GasData*) : void
+    show() : void
+    alarm(alarmMsg: char*) : void
+    register() : void
+}
+
+class GasMixerClient{
+    accept(g: struct GasData*) : void
+    register() : void
+}
+
+class SatefyMonitorClient{
+    accept(g: struct GasData*) : void
+    register() : void
+}
+
+class gasDataAcceptorFunction() <<Function>>{
+
+}
+hide <<Function>> circle
+hide <<Function>> fields
+hide <<Function>> methods
+
+class gasDataAcceptorPtr{
+    typedef void (*gasDataAccepterPtr)(void * struct GasData*);
+}
+
+GasData <-- GasSensor
+GasData <-- DisplayClient
+GasData <-- GasMixerClient
+GasData <-- SatefyMonitorClient
+GasNotificationHandle <-- GasSensor
+GasSensor <-- DisplayClient
+GasSensor <-- GasMixerClient
+GasSensor <-- SatefyMonitorClient
+GasSensor "<<usage>>" ..> gasDataAcceptorPtr
+@enduml

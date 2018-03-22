@@ -1,0 +1,71 @@
+@startuml Meditator Example
+
+interface iRotationgJoint{
+    getRoatation() : int
+    rotate(int x) : int
+    zero() : int
+}
+
+interface iSlidingJoint{
+    getLength() : int
+    setLength(int x) : int
+    zero() : int
+}
+
+class Action{
+    rotatingArmJoint1 : int
+    rotatingArmJoint2 : int
+    rotatingArmJoint3 : int
+    rotatingArmJoint4 : int
+    slidingArmJoint1 : int
+    slidingArmJoint2 : int
+    slidingArmJoint3 : int
+    slidingArmJoint4 : int
+    manipulatorForce : int
+    manipulatorOpen : int
+}
+
+class RobotArmManager{
+    nSteps: unsigned int
+    currentStep: unsigned int
+    status : int
+    graspAt(int x, int y, int z, int t): int
+    computeTrajectory(int x, int y, int z, int t): int
+    executeStep() : int
+    zero() : int
+}
+
+class RoatatingArmJoint{
+    angle : int
+    deviceId: char
+    getRoatation() : int
+    rotate(int x) : int
+    zero() : int
+}
+
+class GraspingManipulator{
+    deviceId : char
+    maxForce : int = 0
+    open(): int
+    close() : int
+    setMaxForce(int m) : int
+    getClosure() : int
+}
+
+class SlidingArmJoint{
+    currentLength : int
+    deviceId : char
+    minArmLength : int
+    maxArmLength : int
+    getLength() : int
+    setLength(int x) : int
+    zero() : int
+}
+
+RobotArmManager --> "100" Action
+RobotArmManager --> "4" RoatatingArmJoint
+RobotArmManager --> "1" GraspingManipulator
+RobotArmManager --> "2" SlidingArmJoint
+RoatatingArmJoint --|> iRotationgJoint
+SlidingArmJoint --|> iSlidingJoint
+@enduml

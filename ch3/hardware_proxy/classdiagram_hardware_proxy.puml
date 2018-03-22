@@ -1,0 +1,60 @@
+@startuml  Hardware Proxy Example
+scale 2
+
+class MotorProxy{
+    motorAddr:unsigned int* = NULL
+    rotaryArmLength: unsigned int
+    accessMotorDirection(): DirectionType
+    accessMotorSpeed(): unsigned int
+    accessMotorState(): unsigned int
+    clearErrorStatus(): void
+    configure(length: unsigned int, location: unsigned int*): void
+    disable(): void
+    enable(): void
+    initialize(): void
+    writeMotorSpeed(direction: DirectionType, speed:unsigned int): void
+    marshal(mData:MotorData): unsigned int
+    unmarshal(encodededMData: unsigned int): MotorData
+}
+note bottom: Motor device interface\n Bits reflect current settings for reading and writing.\n Write 0 to lear a bit, 1 to set a bit.\n Width: 16 Bits\n
+
+
+class MotorDisplay {
+    
+}
+
+class MotorController {
+    
+}
+
+class MotorData{
+    on_off: unsigned char
+    direction: DirectionType
+    speed: unsigned int
+    errorStatus: unsigned char
+    noPowerError: unsigned char
+    noTorqueError: unsigned char
+    BITError: unsigned char
+    overTemperatureError: unsigned char
+    reservedError1: unsigned char
+    reservedError2: unsigned char
+    unknownError: unsigned char
+}
+
+class DirectionType <<Types>> {
+
+}
+
+hide <<Types>> circle
+hide <<Types>> fields
+hide <<Types>> methods
+
+MotorProxy <-- MotorDisplay
+MotorProxy <-- MotorController 
+DirectionType <.. MotorProxy: <<usage>>
+DirectionType <.. MotorData: <<usage>>
+MotorData <.. MotorProxy : <<usage>>
+MotorData <.. MotorController : <<usage>> 
+MotorData <.. MotorDisplay: <<usage>>
+
+@enduml

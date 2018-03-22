@@ -1,0 +1,35 @@
+@startuml observer pattern
+class Datum{
+
+}
+
+class AbstractClient <<interface>>{
+    accept(Datum d): void
+}
+
+class AbstractSubject <<interface>>{
+    subscribe(acceptPtr a) : int
+    unsubscribe(acceptPtr a) : int
+    notify() : void
+}
+
+class ConcreteClient{
+
+}
+
+class ConcreteSubject{
+
+}
+
+class NotificationHandle{
+    aPtr : acceptPtr
+}
+
+Datum "itsDatum" <-- AbstractClient
+Datum "itsDatum" <-- AbstractSubject
+AbstractSubject <-- AbstractClient
+AbstractClient <.. ConcreteClient
+AbstractSubject <.. ConcreteSubject
+AbstractSubject *--> "MAX_SUBSCRIBERS" NotificationHandle
+
+@enduml

@@ -1,0 +1,43 @@
+@startuml Observer pattern a.k.a "Publish-Subscribe"
+scale 2
+
+class NotificationHandle{
+    updateAddr:UpdateFuncPtr
+}
+
+class AbstractSubject{
+    nSubcribers:int = 0
+    subscribe(updateFuncAddr:UpdateFuncPtr):void
+    unsubscribe(updateFuncPtr:UpdateFuncPtr):void
+    notify():void
+}
+
+class AbstractObserver <<file>> {
+    update(instanceNum:int, value:int):void
+    install():void
+    deinstall():void
+}
+
+class UpdateFuncPtr{
+    typedef void (*UpdateFuncPtr)(int instanceNum, int value);
+}
+
+class ConcreteSubject{
+
+} 
+note bottom: Formal Parameters of patterns
+
+class ConcreteObserver <<file>> {
+    
+}
+note bottom: Formal Parameters of patterns
+
+NotificationHandle <-- NotificationHandle : isNotificationHandle
+NotificationHandle <-- AbstractSubject
+AbstractSubject <-- AbstractObserver
+UpdateFuncPtr <.. NotificationHandle: <<usage>>
+UpdateFuncPtr <.. AbstractSubject: <<usage>>
+AbstractSubject <|--ConcreteSubject
+AbstractObserver <|-- ConcreteObserver
+
+@enduml

@@ -106,35 +106,36 @@ void GasSensor_removeItsGasNH(GasSensor *const me, struct GasNotificationHandle 
         {
         }
     }
-    void GasSensor_clearItsGasNH(GasSensor *const me)
+}
+void GasSensor_clearItsGasNH(GasSensor *const me)
+{
+    int pos;
+    for (pos = 0; pos < 100; ++pos)
     {
-        int pos;
-        for (pos = 0; pos < 100; ++pos)
-        {
-            me->itsGasNH[pos] = NULL;
-        }
+        me->itsGasNH[pos] = NULL;
     }
-    GasSensor *GasSensor_Create(void)
+}
+GasSensor *GasSensor_Create(void)
+{
+    GasSensor *me = (GasSensor *)malloc(sizeof(GasSensor));
+    if (me != NULL)
     {
-        GasSensor *me = (GasSensor *)malloc(sizeof(GasSensor));
-        if (me != NULL)
-        {
-            GasSensor_Init(me);
-        }
-        return me;
+        GasSensor_Init(me);
     }
-    void GasSensor_Destroy(GasSensor *const me)
+    return me;
+}
+void GasSensor_Destroy(GasSensor *const me)
+{
+    if (me != NULL)
     {
-        if (me != NULL)
-        {
-            GasSensor_Cleanup(me);
-        }
-        free(me);
+        GasSensor_Cleanup(me);
     }
-    static void cleanUpRelations(GasSensor *const me)
+    free(me);
+}
+static void cleanUpRelations(GasSensor *const me)
+{
+    if (me->itsGasData != NULL)
     {
-        if (me->itsGasData != NULL)
-        {
-            me->itsGasData = NULL;
-        }
+        me->itsGasData = NULL;
     }
+}

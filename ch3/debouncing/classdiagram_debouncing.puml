@@ -1,0 +1,26 @@
+@startuml Debouncing Pattern
+
+class DeviceClient{
+    oldState: unsigned char
+    eventReceive(): void
+}
+
+class BouncingDevice <<hardware>> {
+    deviceState: unsigned char
+    sendEvent(): void
+    getState(): void
+}
+
+class ApplicationClient{
+    deviceEventReceive(dState: unsigned char): void
+}
+
+class DebouncingTimer{
+    delay(delayTime: unsigned int): void
+}
+
+DebouncingTimer "itsDebouncingTimer" <-- DeviceClient
+BouncingDevice "1" -- "1" DeviceClient
+DeviceClient --> "itsApplicationClient" ApplicationClient
+
+@enduml

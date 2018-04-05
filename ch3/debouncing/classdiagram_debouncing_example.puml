@@ -1,0 +1,30 @@
+@startuml Debouncing Pattern Example
+
+class ButtonDriver{
+    oldState: unsigned char
+    toggleOn: unsigned char = 0
+    eventReceive(): void
+}
+
+class Button <<hardware>> {
+    deviceState: unsigned char
+    sendEvent(): void
+    getState(): void
+    evPush()
+    evRelease()
+    backlight(offOn: unsigned char) : void
+}
+
+class MicrowaveEmitter{
+    startEmitting():void
+    stopEmitting():void
+}
+
+class DebouncingTimer{
+    delay(delayTime: unsigned int): void
+}
+
+DebouncingTimer "itsDebouncingTimer" <-- ButtonDriver
+Button "1" -- "1" ButtonDriver
+ButtonDriver --> "itsMicrowaveEmitter" MicrowaveEmitter
+@enduml

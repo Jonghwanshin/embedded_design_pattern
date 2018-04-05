@@ -1,0 +1,54 @@
+@startuml Class diagram for an guarded call example
+class KinematicData{
+    attitude: Attitude
+    sema: OSSemaphore* 
+    Attitude getAttitude()
+    setAttitude(a: Attitude): void
+    Position getPosition()
+    setPosition(p: Position): void
+    Init(): void
+}
+
+class Position {
+    latitude: double
+    longtitude: double 
+    altitude: double
+    getLatitude(): double
+    setLatitude(double: x): void
+    getLongitude(): double
+    setLongitude(double: x): void
+    getAttitude(): double
+    setAttitude(double: x): void
+
+}
+
+class FlightDataDisplay{
+    showFlightData(): void
+}
+
+class Attitude{
+    roll: double
+    pitch: double
+    yaw: double
+    getRoll(): double
+    getPitch(): double
+    getYaw(): double
+    setRoll(double: x): void
+    setPitch(double: x): void
+    setYaw(double: x): void
+}
+
+class Navigator{
+    ownShipPosition: Position
+    updatePosition(): void
+}
+
+class AttitudeController{
+    ownShipAttitude: Attitude
+    manageAttitude(attitude: Attitude): void
+}
+AttitudeController --> KinematicData
+FlightDataDisplay --> KinematicData
+KinematicData --> Navigator 
+
+@enduml

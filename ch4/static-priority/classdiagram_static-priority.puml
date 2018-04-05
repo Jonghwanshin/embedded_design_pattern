@@ -1,0 +1,58 @@
+@startuml Class diagram for static priority example
+
+class MotorPositionSensor{
+    mps_priority
+    mps_stack
+    mps_eventQueue
+    getPosition()
+    MotorPositionSensor_run()
+    Init()
+}
+note top of MotorPositionSensor{
+    Priority = 8
+    Period = 100ms
+}
+
+class MotorDisplay{
+    md_priority
+    md_eventQueue
+    md_stack
+    display()
+    MotorDisplay_rum()
+    Init()
+}
+note top of MotorDisplay{
+    Priority = 10
+    Period = 600ms
+}
+
+class MotorController{
+    motor1Pos
+    Motor2Pos
+    mc_priority
+    mc_eventQueue
+    mc_stack
+    move()
+    zero()
+    MotorController_run()
+    Init()
+}
+
+note top of MotorController{
+    Priority = 5
+    Period = 50ms
+}
+
+class MotorData {
+    commandedPosition
+    measuredPosition
+    getCmdPos()
+    getMeasPos()
+    setCmdPos()
+    setMeasPos()
+}
+
+MotorPositionSensor --> MotorData
+MotorDisplay --> MotorData
+MotorController --> MotorData
+@enduml

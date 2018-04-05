@@ -1,0 +1,39 @@
+@startuml Cyclic Executive Example
+
+class GasControlExecutive <<File>> {
+    controlLoop()
+}
+
+class GasControlEpochTimer <<File>> {
+    cycleTime
+    elapsed
+    epochTimerHasElapsed()
+    startEpochTimer()
+    stopEpochTimer()
+}
+
+class GasActuatorThread <<File>> {
+    GasActuatorThread_run()
+}
+
+class GasSensorThread <<File>> {
+    GasSensorThread_run()
+}
+
+class GasDisplayThread <<File>> {
+    GasDisplayThread_run()
+}
+
+class SharedData <<File>> {
+    commandedGasFlow
+    measuredGasFlow
+}
+
+GasControlExecutive --> GasActuatorThread
+GasControlExecutive --> GasDisplayThread
+GasControlExecutive --> GasSensorThread
+GasControlExecutive --> GasControlEpochTimer
+GasDisplayThread --> SharedData
+GasActuatorThread --> SharedData
+GasSensorThread --> SharedData
+@enduml

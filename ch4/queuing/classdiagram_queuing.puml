@@ -1,0 +1,54 @@
+@startuml Queuing Example
+    class GasDataQueue{
+        head:int = 0
+        size:int = 0
+        tail:int = 0
+        sema:OSSempahore* = NULL
+        getNextIndex(index: int): int
+        insert(g:GasData): int
+        remove(): GasData*
+        isFull(): unsigned char
+        isEmpty(): unsigned char
+        Init()
+        Cleanup()
+    }
+
+    class GasData{
+        gType: GAS_TYPE = UNKNOWN_GAS
+        conc:double=0.0
+        flowInCCPerMin:unsigned int=0
+    }
+
+    package SensorThread{
+        class itsO2Sensor{
+            conc
+            flow
+            getO2Data()
+        }
+        class itsN2Sensor{
+            conc
+            flow
+            getN2Data()
+        }
+        class itsHeSensor{
+            conc
+            flow
+            getHeData()
+        }
+    }
+
+    package GasProcessingThread{
+        class itsGasController{
+            handleGasData()
+        }
+        class itsGasDisplay{
+            printGasData()
+        }
+        itsGasController --> itsGasDisplay
+    }
+
+    GasData "GAS_QUEUE_SIZE" --* "1" GasDataQueue
+    SensorThread -left--> "1, itsGasDataQueue" GasDataQueue
+    GasDataQueue "itsGasDataQueue" <-- "1" GasProcessingThread
+    
+@enduml

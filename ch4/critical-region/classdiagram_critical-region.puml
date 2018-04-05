@@ -1,0 +1,28 @@
+@startuml An example for critical region pattern
+class Robotarm{
+    moveTo(int x, int y,int z): int
+}
+
+class CRRobotArmManager {
+    moveRobotArm(): void
+    motorZero(): void
+}
+
+class UserInput {
+    int x = 0
+    int y = 0
+    int z = 0
+    int getX()
+    int getY()
+    int getZ()
+}
+
+class CRDisplay {
+    void printInt(char* msg, int value)
+    void printMsg(char* msg)
+}
+
+RobotArm <-- CRRobotArmManager
+CRRobotArmManager --> UserInput
+CRRobotArmManager --> CRDisplay
+@enduml

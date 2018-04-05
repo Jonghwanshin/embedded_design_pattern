@@ -1,0 +1,25 @@
+@startuml Class diagram for rendezvous example
+class SyncTask1 {
+    process1(): void
+}
+class SyncTask2 {
+    process2(): void
+}
+class SyncTask3 {
+    process3(): void
+}
+class ThreadBarrier {
+    expectedCount:int = 3
+    currentCount:int = 0
+    barrier: OSSemaphore*
+    mutex: OSSemaphore*
+    Cleanup()
+    synchronize():void
+    reset(x:int):void
+    Init()
+}
+
+SyncTask1 -->"1 itsThreadBarrier" ThreadBarrier
+SyncTask2 -->"1 itsThreadBarrier" ThreadBarrier
+SyncTask3 -->"1 itsThreadBarrier" ThreadBarrier
+@enduml

@@ -7,7 +7,7 @@ void ThreadBarrier_Init(ThreadBarrier *const me)
     me->expectedCount = 3;
     me->mutex = OSSemaphore_Create();
     me->barrier = OSSemaphore_Create();
-    if(me->barrier)
+    if (me->barrier)
     {
         OSSemaphore_lock(me->barrier);
         printf("BARRIER IS LOCKED FIRST ME\n");
@@ -29,9 +29,10 @@ void ThreadBarrier_synchronize(ThreadBarrier *const me)
     /* 
         protect the critical region around 
         the currentCount
+        currentCount: the variable for counting entered semaphores
     */
     OSSemaphore_lock(me->mutex);
-    ++me->currentCount; /* critical region */
+        ++me->currentCount; /* critical region */
     OSSemaphore_release(me->mutex);
 
     /*
@@ -40,7 +41,7 @@ void ThreadBarrier_synchronize(ThreadBarrier *const me)
         thread or the hightest priority blocked
         thread(depending on the OS)
     */
-    if(me->currentCount == me->expectedCount)
+    if (me->currentCount == me->expectedCount)
     {
         printf("Conditions met \n");
         OSSemaphore_release(me->barrier);
@@ -54,8 +55,8 @@ void ThreadBarrier_synchronize(ThreadBarrier *const me)
 }
 ThreadBarrier *ThreadBarrier_Create(void)
 {
-    ThreadBarrier* me = (ThreadBarrier *)malloc(sizeof(ThreadBarrier));
-    if(me!=NULL)
+    ThreadBarrier *me = (ThreadBarrier *)malloc(sizeof(ThreadBarrier));
+    if (me != NULL)
     {
         ThreadBarrier_Init(me);
         return me;
@@ -63,9 +64,48 @@ ThreadBarrier *ThreadBarrier_Create(void)
 }
 void ThreadBarrier_Destroy(ThreadBarrier *const me)
 {
-    if(me!=NULL)
+    if (me != NULL)
     {
         ThreadBarrier_Cleanup(me);
     }
     free(me);
+}
+
+struct barrier_type
+{
+    int arrive_counter;
+    int leave_counter;
+    int flag;
+    std::mutex lock;
+}
+
+void barrier(barrier_type* b, int p)
+{
+    b->lock.lock();
+    if(b->leave_counter != p)
+    {
+        b->lock.unlock();
+        while (b->leave_counter != p); //wait for all to leave before clearing
+        b->lock.lock();
+    }
+    if(b->arrive_counter == 0)
+    {
+        b->flag = 0;
+    }
+    b->arrive_counter++;
+    int arrived = b->arrive_counter;
+    b->lock.unlock();
+    if(arrived == p)
+    {
+        b->arrive_counter = 0;
+        b->leave_counter = 1;
+        b->flag = 1;
+    }
+    else
+    {
+        while(b->flag == 0);
+        b->lock.lock();
+        b->leave_counter++;
+        b->lock.unlock();
+    }
 }

@@ -1,0 +1,66 @@
+@startuml An example for simultaneous locking
+
+class SensorMaster{
+    optical_configrue(wheelSize:int, sensitivity:int):void
+    optical_disable():void
+    optical_enable():void
+    optical_getSpeed():double
+    doppler_configure(sampleRate:short):void
+    doppler_disable():void
+    doppler_enable():void
+    gps_activate():void
+    gps_configure(reqSatellites:short, useFast:int):void
+    gps_deactivate():void
+    gps_getPosition():Position
+}
+
+class PositionPredictor{
+    currentPosition:Position
+    estPosition:Position
+    timeIncrement:int
+    computePosition():void
+    getPosition():struct Position*
+}
+
+class SimMutex{
+    lock(): void
+    release(): void
+}
+
+class SensorConfigurator{
+    setupSensors(): void
+}
+
+class BuiltInTester{
+    runAllTests(): int
+    testOpticalSensor(): int
+    testDopplerSensor(): int
+    testGPS(): int
+}
+class OpticalSpeedSensor{
+    getSpeed(): double
+    enable(): void
+    disable(): void
+    configure(wheelSize:int, sensitivity: int):void
+}
+class DopplerSpeedSensor{
+    getSpeed(): double
+    enable(): void
+    disable(): void
+    configure(sampleRate:short):void
+}
+class GPSPositionSensor{
+    getSpeed(): double
+    enable(): void
+    disable(): void
+    configure(reqSatellites:short, useFast:int):void
+}
+
+PositionPredictor --> SensorMaster
+SimMutex "1" <--* SensorMaster
+SensorMaster "1" *-right-> OpticalSpeedSensor
+SensorMaster "1" *--> DopplerSpeedSensor
+SensorMaster "1" *--> GPSPositionSensor
+SensorMaster "1" <-- BuiltInTester
+SensorMaster "1" <-- SensorConfigurator
+@enduml

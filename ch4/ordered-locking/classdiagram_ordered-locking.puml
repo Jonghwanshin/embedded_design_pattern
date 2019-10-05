@@ -1,0 +1,63 @@
+@startuml Ordered Locking Pattern Example
+
+class KinematicModelClient {
+    updateKinematics(): void
+}
+
+class RoutePlanningClient {
+    updateRoute(): void
+}
+class PositionSensor {
+    position: Position
+    resourceId:int = 1
+    getPosition(): struct Position
+    setPosition(p: struct Position): void
+    lockDyadic(): int
+    releaseDyadic(): void
+}
+
+class VelocitySensor {
+    velocity: Velocity
+    resourceID:int = 2
+    getVelocity(): struct Position
+    setVelocity(p: struct Position): void
+    lockDyadic(): int
+    releaseDyadic(): void
+}
+
+class AlttitudeSensor {
+    alttitude: Alttitude
+    resourceID:int = 2
+    getAlttitude(): struct Position
+    setAlttitude(p: struct Position): void
+    lockDyadic(): int
+    releaseDyadic(): void
+}
+
+class ResourceList {
+    rIDList: int rIDList[20]
+    nIDs: int = 0
+    isInOrder(rID:int):char
+    addLock(rID:int):int
+    removeLock(rID:int):void
+}
+
+class Mutex {
+
+}
+
+KinematicModelClient --> PositionSensor
+KinematicModelClient --> VelocitySensor
+KinematicModelClient --> AlttitudeSensor
+RoutePlanningClient --> PositionSensor
+RoutePlanningClient --> VelocitySensor
+RoutePlanningClient --> AlttitudeSensor
+PositionSensor --> Mutex
+VelocitySensor --> Mutex
+AlttitudeSensor --> Mutex
+ResourceList -right-> Mutex
+PositionSensor --> ResourceList
+VelocitySensor --> ResourceList
+AlttitudeSensor --> ResourceList
+
+@enduml
